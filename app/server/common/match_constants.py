@@ -1,0 +1,71 @@
+class MatchConstants:
+
+    GET_JOB_NAME = "search_job_name"
+    GET_JOB_NAME_EVENT_STATUS = "search_job_name_event_status"
+    GET_JOB_NAME_EVENT_STATUS_DATE = "search_job_name_event_status_date"
+    GET_JOB_NAME_STATUS = 'search_job_name_status'
+    GET_JOB_CHAMPIONSHIP = "search_job_championship"
+    GET_JOB_CHAMPIONSHIP_EVENT_DATE = "search_job_championship_event_date"
+    GET_JOB_STATUS = "search_job_status"
+    GET_JOB_EVENT = "search_job_event"
+    GET_JOB_EVENT_EVENT = "search_job_event_two_event"
+    GET_JOB_DAY = "search_job_day"
+    GET_JOB_DATE_STATUS = "search_job_date_status"
+    GET_JOB_TYPE_STATUS = "search_job_instance_status"
+
+    GET_JOB_CHAMPIONSHIP_DATE_STATUS = "search_championship_date_status"
+    GET_JOB_STATUS_DATE = "search_status_date"
+    GET_JOB_DATE_EVENT = "search_date_event"
+    GET_JOB_ID = "search_jobid"
+    DELETE_JOB_ID = "delete_jobid"
+    DELETE_JOB_NAME = "delete_job_name"
+    DELETE_STATUS = "delete_status"
+    DELETE_DATE_EVENT = "delete_date_event"
+
+    DATE_FORMAT_FULL = "%Y-%m-%d %H:%M:%S"
+    DATE_FORMAT_PART = "%Y-%m-%d %H:%M:%S"
+
+    EXECUTE_EVERY_DAY = "EVERY_DAY"
+    EXECUTE_ALL_TIME = "00:00:00"
+
+    ## JOB SCHEDULE
+    JOB_STATUS_ACTIVE = "ACTIVE"
+    JOB_STATUS_DISABLED = "DISABLED"
+    JOB_STATUS_PLAN = "PLAN"
+
+    DAY_TODAY = "TODAY"
+    DAY_TOMORROW = "TOMORROW"
+    TIMEZONE_SYSTEM = "TZ_SYSTEM"
+
+    STATUS_SUCCESS = "SUCCESS"
+    STATUS_ERROR = "ERROR"
+    STATUS_FAIL = "FAIL"
+
+    EVENT_JOB_PLAN = "JOB-PLANNED"
+    EVENT_JOB_START = "JOB-INITIATED"
+    EVENT_JOB_END = "JOB-SHUTDOWN"
+    EVENT_JOB_ERROR_END = "JOB-ERROR_SHUTDOWN"
+    EVENT_JOB_START = "JOB-START"
+    EVENT_JOB_FINISHED_AG = "JOB-FINISHED_AGENT"
+    EVENT_JOB_SUCCESS = "JOB-SUCCESS"
+    EVENT_JOB_ERROR = "JOB-ERROR"
+    EVENT_JOB_FAIL = "JOB-FAIL-EXECUTION"
+
+    EVENT_SCHEDULED_INIT = "SCHEDULED-INIT"
+    EVENT_SCHEDULED_START = "SCHEDULED-START"
+    EVENT_SCHEDULED_FINISHED_AG = "SCHEDULED-FINISHED_AGENT"
+    EVENT_SCHEDULED_END = "SCHEDULED-END"
+    EVENT_SCHEDULED_FAIL = "SCHEDULED-FAIL"
+
+    MSG_JOB_INF_SUCCESS = "JOB EXECUTED END"
+    MSG_JOB_INF_ERROR = "JOB EXECUTED ERROR"
+    MSG_JOB_INF_START = "JOB SCHEDULE START"
+    MSG_JOB_INF_AGENT = "JOB SCHEDULE FINISHED"
+
+    PROCESS_SCHEDULE_JOB_DATETIME = "PROC_SCHEDULE_JOB_DATETIME"
+    PROCESS_SCHEDULE_JOB_WEEKDAYS = "PROC_SCHEDULE_JOB_WEEKDAYS"
+
+    JOB_TYPE_SUPPORT_RUNTIME = "JOB_INSTANCE_RUNTIME"
+    JOB_TYPE_SUPPORT_DATETIME = "JOB_INSTANCE_DATETIME"
+
+
