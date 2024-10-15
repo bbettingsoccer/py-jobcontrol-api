@@ -34,3 +34,6 @@ class OperationDAO(metaclass=ABCMeta):
     @abstractmethod
     async def delete_condition(self, filter):
         pass
+    @abstractmethod
+    async def delete_many(self):
+        pass

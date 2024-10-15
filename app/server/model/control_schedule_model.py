@@ -1,10 +1,13 @@
-from pydantic import BaseModel, Field, constr, condate, create_model, condate
-from _datetime import datetime, date, timedelta
+from pydantic import BaseModel, Field, constr, create_model
+from _datetime import datetime
 
 
 class ControlScheduleModel(BaseModel):
     job_name: constr(strict=True) = Field(..., alias='job_name')
+    job_instance: constr(strict=True) = Field(..., alias='job_instance')
+    job_type: constr(strict=True) = Field(..., alias='job_type')
     job_event: constr(strict=True) = Field(..., alias='job_event')
+    job_classification: constr(strict=True) = Field(..., alias='job_classification')
     championship: constr(strict=True) = Field(..., alias='championship')
     start_date_execution: datetime = None
     end_date_execution: datetime = None
@@ -13,7 +16,10 @@ class ControlScheduleModel(BaseModel):
 
     class config:
         job_name = "job_name"
+        job_instance = 'job_instance'
+        job_type = "job_type"
         job_event = "job_event"
+        job_classification = "job_classification"
         championship = "championship"
         start_date_execution = "start_date_execution"
         end_date_execution = "end_date_execution"
@@ -46,7 +52,10 @@ class ControlScheduleModel(BaseModel):
         return {
             "_id": str(jobControl['_id']),
             "job_name": str(jobControl["job_name"]),
+            "job_instance": str(jobControl["job_instance"]),
+            "job_type": str(jobControl["job_type"]),
             "job_event": str(jobControl["job_event"]),
+            "job_classification": str(jobControl["job_classification"]),
             "championship": str(jobControl["championship"]),
             "start_date_execution": jobControl["start_date_execution"],
             "end_date_execution": jobControl["end_date_execution"],

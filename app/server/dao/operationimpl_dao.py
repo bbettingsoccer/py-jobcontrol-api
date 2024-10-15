@@ -1,6 +1,6 @@
 from abc import ABC
 from motor.core import AgnosticCollection
-
+import asyncio
 from .operation_dao import OperationDAO
 from bson.objectid import ObjectId
 from ..common.database import MongoManager
@@ -19,10 +19,13 @@ class OperationImplDAO(OperationDAO, ABC):
 
     async def save(self, data: dict) -> dict:
         try:
-            collectionObj = await self.instance_collection.insert_one(data)
-            new_collectionObj = await self.instance_collection.find_one({"_id": collectionObj.inserted_id})
-            return new_collectionObj
-        except Exception as e:
+            loop = self.instance_collection.get_io_loop()
+            loop.run_until_complete(self.instance_collection.insert_one(data))
+            # await self.instance_collection.instance_collection.insert_one(data)
+            #collectionObj = await self.instance_collection.insert_one(data)
+            # new_collectionObj = await self.instance_collection.find_one({"_id": collectionObj.inserted_id})
+            return None # collectionObj
+        except RuntimeError as e:
             print("[Error :: DAO] - Save > ", e)
             return None
 
@@ -58,7 +61,6 @@ class OperationImplDAO(OperationDAO, ABC):
 
     async def update_one(self, id, data):
         try:
-            print("UPDATE_ONE > ", data)
             await self.instance_collection.update_one({"_id": ObjectId(id)}, {"$set": data})
             return True
         except Exception as e:
@@ -68,6 +70,14 @@ class OperationImplDAO(OperationDAO, ABC):
     async def delete_condition(self, filter):
         try:
             await self.instance_collection.delete_many(filter)
+            return True
+        except Exception as e:
+            print('[Error :: DAO] - Delete_Condition > ', e)
+            return False
+
+    async def delete_many(self):
+        try:
+            await self.instance_collection.delete_many({})
             return True
         except Exception as e:
             print('[Error :: DAO] - Delete_Condition > ', e)

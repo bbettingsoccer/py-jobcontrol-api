@@ -6,6 +6,7 @@ from typing import List
 class JobFunctionalModel(BaseModel):
     job_name: constr(strict=True) = Field(...)
     job_type: constr(strict=True) = Field(...)
+    job_classification: constr(strict=True) = Field(...)
     scrapy: constr(strict=True) = Field(...)
     url: constr(strict=True) = Field(...)
     championship: constr(strict=True) = Field(...)
@@ -23,6 +24,7 @@ class JobFunctionalModel(BaseModel):
     class config:
         job_name = "job_name"
         job_type = "job_type"
+        job_classification = "job_classification"
         scrapy = "scrapy"
         url = "url"
         championship = "championship"
@@ -64,6 +66,7 @@ class JobFunctionalModel(BaseModel):
             "_id": str(jobControl['_id']),
             "job_name": str(jobControl["job_name"]),
             "job_type": str(jobControl["job_type"]),
+            "job_classification": jobControl["job_classification"],
             "scrapy": str(jobControl["scrapy"]),
             "url": str(jobControl["url"]),
             "championship": str(jobControl["championship"]),

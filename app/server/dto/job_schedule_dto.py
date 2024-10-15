@@ -1,24 +1,26 @@
-import datetime
-
 
 class JobScheduleDto:
     job_name: str
     job_type: str
+    job_classification: str
+    job_instance: str
     championship: str
-    date_start: datetime
-    date_end: datetime
-    external_class: str
-    external_method: str
+    datetime_start: str
+    datetime_end: str
+    class_external: str
+    method_external: str
     interval: int
 
-    def __init__(self, job_name: str, job_type: str, championship: str, date_start: datetime, date_end: datetime, external_class: str, external_method: str, interval: int):
+    def __init__(self, job_name: str, job_type: str, job_classification: str, job_instance: str, championship: str, datetime_start: str, datetime_end: str, class_external: str, method_external: str, interval: int):
         self.job_name = job_name
         self.job_type = job_type
-        self.championship: championship
-        self.date_start = date_start
-        self.date_end = date_end
-        self.external_class = external_class
-        self.external_method = external_method
+        self.job_classification = job_classification
+        self.job_instance = job_instance
+        self.championship = championship
+        self.datetime_start = datetime_start
+        self.datetime_end = datetime_end
+        self.class_external = class_external
+        self.method_external = method_external
         self.interval = interval
 
 

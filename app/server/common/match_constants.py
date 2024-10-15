@@ -1,17 +1,25 @@
 class MatchConstants:
 
-    GET_JOB_NAME = "search_job_name"
-    GET_JOB_NAME_EVENT_STATUS = "search_job_name_event_status"
-    GET_JOB_NAME_EVENT_STATUS_DATE = "search_job_name_event_status_date"
-    GET_JOB_NAME_STATUS = 'search_job_name_status'
-    GET_JOB_CHAMPIONSHIP = "search_job_championship"
+    GET_JOB_TYPE_CLASSIFICATION_STATUS_EVENT = "search_job_support_by_type_classification_status_event"
+    GET_JOB_TYPE_STATUS_EVENT = "search_job_support_by_type_status_event"
+    GET_JOB_BY_NAME = "search_job_by_name"
+    GET_JOB_NAME_EVENT = "search_job_BY_name_job_event"
+    GET_JOB_BY_NAME_EVENTS_DATE = "search_job_BY_name_events_date"
+    GET_JOB_BY_NAME_INSTANCE_EVENTS_DATE = "search_job_BY_name_instance_events_date"
+    GET_JOB_BY_NAME = 'search_job_by_name'
+    GET_JOB_BY_NAME_INSTANCE = 'search_job_by_name_instance'
+    GET_JOB_BY_NAME_INSTANCE_EVENT_STATUS = 'search_job_by_name_instance_event_status'
+
+    GET_JOB_BY_CHAMPIONSHIP = "search_job_by_championship"
     GET_JOB_CHAMPIONSHIP_EVENT_DATE = "search_job_championship_event_date"
+
     GET_JOB_STATUS = "search_job_status"
     GET_JOB_EVENT = "search_job_event"
     GET_JOB_EVENT_EVENT = "search_job_event_two_event"
-    GET_JOB_DAY = "search_job_day"
+    GET_JOB_BY_DAY_EXECUTION = "search_job_by_day_execution"
     GET_JOB_DATE_STATUS = "search_job_date_status"
-    GET_JOB_TYPE_STATUS = "search_job_instance_status"
+    GET_JOB_BY_CLASSIFICATION = "search_job_by_classification"
+    GET_JOB_BY_CLASSIFICATION_STATUS = "search_job_by_classification_status"
 
     GET_JOB_CHAMPIONSHIP_DATE_STATUS = "search_championship_date_status"
     GET_JOB_STATUS_DATE = "search_status_date"
@@ -19,6 +27,8 @@ class MatchConstants:
     GET_JOB_ID = "search_jobid"
     DELETE_JOB_ID = "delete_jobid"
     DELETE_JOB_NAME = "delete_job_name"
+    DELETE_JOB_BY_TYPE_CLASSIFICATION_EVENT = "delete_job_by_type_classification_event"
+
     DELETE_STATUS = "delete_status"
     DELETE_DATE_EVENT = "delete_date_event"
 
@@ -27,6 +37,9 @@ class MatchConstants:
 
     EXECUTE_EVERY_DAY = "EVERY_DAY"
     EXECUTE_ALL_TIME = "00:00:00"
+    USE_DATETIME_NO = "NO"
+    USE_DATETIME_YES = "YES"
+    USE_DATETIME_ALL = "*"
 
     ## JOB SCHEDULE
     JOB_STATUS_ACTIVE = "ACTIVE"
@@ -35,6 +48,7 @@ class MatchConstants:
 
     DAY_TODAY = "TODAY"
     DAY_TOMORROW = "TOMORROW"
+    DAY_360 = "DAY_360"
     TIMEZONE_SYSTEM = "TZ_SYSTEM"
 
     STATUS_SUCCESS = "SUCCESS"
@@ -53,9 +67,22 @@ class MatchConstants:
 
     EVENT_SCHEDULED_INIT = "SCHEDULED-INIT"
     EVENT_SCHEDULED_START = "SCHEDULED-START"
+    EVENT_SCHEDULED_COMPLETED = "SCHEDULED_COMPLETED"
+    EVENT_SCHEDULED_STOPPED = "SCHEDULED_STOPPED"
+
     EVENT_SCHEDULED_FINISHED_AG = "SCHEDULED-FINISHED_AGENT"
     EVENT_SCHEDULED_END = "SCHEDULED-END"
     EVENT_SCHEDULED_FAIL = "SCHEDULED-FAIL"
+
+    STATUS_SCHEDULED_STOPPED_FAIL_FUNCTIONAL = "STOPPED_BY_FUNCTIONAL_JOB_FAIL_INSTANCE"
+    STATUS_SCHEDULED_DAY_ONLY_TIME = "SCHEDULED_ONCE_DAY_ONLY_TIME"
+    STATUS_EXECUTED_ON_TIME = "SCHEDULED_EXECUTED_ON_DATETIME"
+    STATUS_STOPPER_MANUAL = "STOPPER_MANUAL"
+    STATUS_STOPPER_INSTANCE_OR_DATETIME = "STOPPER_FOR_INSTANCE_OR_DATETIME"
+
+    STATUS_SCHEDULED_DAY_EVERY_MINUTES = "SCHEDULED_EVERY_MINUTES"
+    STATUS_SCHEDULED_ONLY_DATE_TIME = "SCHEDULED_ONLY_DATE_TIME"
+    STATUS_STOPPED_MANUAL = "STOPPED_MANUAL"
 
     MSG_JOB_INF_SUCCESS = "JOB EXECUTED END"
     MSG_JOB_INF_ERROR = "JOB EXECUTED ERROR"
@@ -65,7 +92,12 @@ class MatchConstants:
     PROCESS_SCHEDULE_JOB_DATETIME = "PROC_SCHEDULE_JOB_DATETIME"
     PROCESS_SCHEDULE_JOB_WEEKDAYS = "PROC_SCHEDULE_JOB_WEEKDAYS"
 
-    JOB_TYPE_SUPPORT_RUNTIME = "JOB_INSTANCE_RUNTIME"
+    JOB_TYPE_FUNCTIONAL = "JOB_FUNCTIONAL"
+    JOB_TYPE_SUPPORT = "JOB_SUPPORT"
+    JOB_SUPPORT_RUNTIME_WITH_TIME = "JBSUP_RUNTIME_WITH_TIME"
+    JOB_SUPPORT_RUNTIME_WITHOUT_TIME = "JBSUP_RUNTIME_WITHOUT_TIME"
+    JOB_SUPPORT_ONLINE_WITH_DATETIME = "JBSUP_ONLINE_WITH_DATETIME"
+
     JOB_TYPE_SUPPORT_DATETIME = "JOB_INSTANCE_DATETIME"
 
 

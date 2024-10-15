@@ -1,20 +1,16 @@
-from _datetime import datetime
 from bson import ObjectId
 from app.server.common.match_constants import MatchConstants
 from app.server.common.timezone_util import TimezoneUtil
 from app.server.dao.operationimpl_dao import OperationImplDAO
 from fastapi.encoders import jsonable_encoder
-
-from app.server.dto.job_schedule_dto import JobScheduleDto
 from app.server.model.control_schedule_model import ControlScheduleModel
-from app.server.schedule.factory.schedule_job_functional_factory import ScheduleJobFunctionalFactory
 from app.server.service.control_execution_service import ControlExecutionService
 
 
-class ControlScheduleService:
+class ControlScheduleFunctionalService:
 
-    def __init__(self):
-        self.collection = OperationImplDAO("control_scheduled")
+    def __init__(self) -> object:
+        self.collection = OperationImplDAO("control_scheduled_functional")
 
     async def getJobAll(self):
         objectL = []
@@ -32,12 +28,21 @@ class ControlScheduleService:
     async def getJobForCondition(self, search: str, values: [str]) -> []:
         objectL = []
         filter = []
+
         match search:
-            case MatchConstants.GET_JOB_NAME:
+            case MatchConstants.GET_JOB_BY_NAME:
                 filter = {ControlScheduleModel.config.job_name: {"$eq": values[0]}}
-            case MatchConstants.GET_JOB_NAME_STATUS:
+
+            case MatchConstants.GET_JOB_BY_NAME_INSTANCE:
                 filter = {"$and": [{ControlScheduleModel.config.job_name: {"$eq": values[0]}},
-                                   {ControlScheduleModel.config.status: {"$eq": values[1]}}]}
+                                   {ControlScheduleModel.config.job_instance: {"$eq": values[1]}}]}
+            case MatchConstants.GET_JOB_BY_NAME_INSTANCE_EVENT_STATUS:
+                filter = {"$and": [{ControlScheduleModel.config.job_name: {"$eq": values[0]}},
+                                   {ControlScheduleModel.config.job_instance: {"$eq": values[1]}},
+                                   {ControlScheduleModel.config.job_event: {"$eq": values[2]}},
+                                   {ControlScheduleModel.config.status: {"$eq": values[3]}}]
+                          }
+
             case MatchConstants.GET_JOB_CHAMPIONSHIP_EVENT_DATE:
                 filter = {"$and": [{ControlScheduleModel.config.championship: {"$eq": values[0]}},
                                    {"$or": [
@@ -46,25 +51,44 @@ class ControlScheduleService:
                                    },
                                    {ControlScheduleModel.config.start_date_execution: {"$eq": values[3]}}]
                           }
-            case MatchConstants.GET_JOB_CHAMPIONSHIP:
+            case MatchConstants.GET_JOB_BY_CHAMPIONSHIP:
                 filter = {ControlScheduleModel.config.championship: {"$eq": values[0]}}
             case MatchConstants.GET_JOB_EVENT:
                 filter = {ControlScheduleModel.config.job_event: {"$eq": values[0]}}
             case MatchConstants.GET_JOB_EVENT_EVENT:
                 filter = {"$or": [{ControlScheduleModel.config.job_event: {"$eq": values[0]}},
-                                   {ControlScheduleModel.config.job_event: {"$eq": values[1]}}]}
+                                  {ControlScheduleModel.config.job_event: {"$eq": values[1]}}]}
             case MatchConstants.GET_JOB_DATE_STATUS:
                 filter = {"$and": [{ControlScheduleModel.config.start_date_execution: {"$eq": values[0]}},
                                    {ControlScheduleModel.config.status: {"$eq": values[1]}}]}
-            case MatchConstants.GET_JOB_NAME_EVENT_STATUS:
+            case MatchConstants.GET_JOB_BY_NAME_EVENTS_DATE:
                 filter = {"$and": [{ControlScheduleModel.config.job_name: {"$eq": values[0]}},
-                                   {ControlScheduleModel.config.job_event: {"$eq": values[1]}},
-                                   {ControlScheduleModel.config.status: {"$eq": values[2]}}]}
-            case MatchConstants.GET_JOB_NAME_EVENT_STATUS_DATE:
-                filter = {"$and": [{ControlScheduleModel.config.job_name: {"$eq": values[0]}},
-                                   {ControlScheduleModel.config.job_event: {"$eq": values[1]}},
-                                   {ControlScheduleModel.config.status: {"$eq": values[2]}},
+                                   {"$or":
+                                        [{ControlScheduleModel.config.job_event: {"$eq": values[1]}},
+                                         {ControlScheduleModel.config.job_event: {"$eq": values[2]}}
+                                         ]
+                                    },
                                    {ControlScheduleModel.config.start_date_execution: {"$eq": values[3]}}]}
+            case MatchConstants.GET_JOB_BY_NAME_INSTANCE_EVENTS_DATE:
+                filter = {"$and": [{ControlScheduleModel.config.job_name: {"$eq": values[0]}},
+                                   {ControlScheduleModel.config.job_instance: {"$eq": values[1]}},
+                                   {"$or":
+                                        [{ControlScheduleModel.config.job_event: {"$eq": values[2]}},
+                                         {ControlScheduleModel.config.job_event: {"$eq": values[3]}}
+                                         ]
+                                    },
+                                   {ControlScheduleModel.config.start_date_execution: {"$eq": values[3]}}]
+                          }
+
+            case MatchConstants.GET_JOB_TYPE_CLASSIFICATION_STATUS_EVENT:
+                filter = {"$and": [{ControlScheduleModel.config.job_type: {"$eq": values[0]}},
+                                   {ControlScheduleModel.config.status: {"$eq": values[1]}},
+                                   {ControlScheduleModel.config.job_event: {"$eq": values[2]}},
+                                   {ControlScheduleModel.config.job_classification: {"$eq": values[3]}}]}
+            case MatchConstants.GET_JOB_TYPE_STATUS_EVENT:
+                filter = {"$and": [{ControlScheduleModel.config.job_type: {"$eq": values[0]}},
+                                   {ControlScheduleModel.config.status: {"$eq": values[1]}},
+                                   {ControlScheduleModel.config.job_event: {"$eq": values[2]}}]}
         try:
             objects = await self.collection.find_condition(filter)
             if objects:
@@ -80,6 +104,10 @@ class ControlScheduleService:
         match type:
             case MatchConstants.DELETE_JOB_NAME:
                 filter = {ControlScheduleModel.config.job_name: {"$eq": values[0]}}
+            case MatchConstants.DELETE_JOB_BY_TYPE_CLASSIFICATION_EVENT:
+                filter = {"$and": [{ControlScheduleModel.config.job_type: {"$eq": values[0]}},
+                                   {ControlScheduleModel.config.job_event: {"$eq": values[1]}},
+                                   {ControlScheduleModel.config.job_classification: {"$eq": values[2]}}]}
         try:
             return await self.collection.delete_condition(filter)
         except Exception as e:
@@ -87,7 +115,8 @@ class ControlScheduleService:
             return False
 
     async def save(self, data: ControlScheduleModel):
-        filter = []
+        print("SERVICE > save ", data)
+
         try:
             jsonObj = jsonable_encoder(data)
             await self.collection.save(jsonObj)
@@ -96,32 +125,37 @@ class ControlScheduleService:
             print('Error :: Service] - Save >', e)
             raise
 
-    async def update_for_schedule_event_init(self, job_name: str, schedule_event_find: str, schedule_event_save: str,
-                                             schedule_status: str, dateTimeObj: datetime):
-        filter = []
+    async def update_schedule_for_event_and_status(self, job_name: str, job_instance: str, schedule_event_save: str,
+                                                   status_schedule: str):
+        print("update_for_schedule_event_init()")
         try:
-            value_filter = [job_name, schedule_event_find, MatchConstants.STATUS_SUCCESS, dateTimeObj]
-            jbc_schedule_l = await self.getJobForCondition(MatchConstants.GET_JOB_NAME_EVENT_STATUS_DATE, value_filter)
+            value_filter = [job_name, job_instance]
+            jbc_schedule_l = await self.getJobForCondition(MatchConstants.GET_JOB_BY_NAME_INSTANCE, value_filter)
+
             if jbc_schedule_l:
-                objectFind = jbc_schedule_l[0]
-                filter = {"job_name": job_name}
-                del objectFind['_id']
-                objectFind[ControlScheduleModel.config.job_event] = schedule_event_save
-                objectFind[ControlScheduleModel.config.status] = schedule_status
-                await self.collection.update_many(filter, objectFind)
-            return True
+                for job_schedule in jbc_schedule_l:
+                    print("[update_schedule_for_event_and_status] - UPDATE EVENT - STATUS ")
+                    id = (job_schedule['_id'])
+                    del job_schedule['_id']
+                    filter = {"_id": ObjectId(id)}
+                    job_schedule[ControlScheduleModel.config.job_event] = schedule_event_save
+                    job_schedule[ControlScheduleModel.config.status] = status_schedule
+                    await self.collection.update_many(filter, job_schedule)
+                return True
         except Exception as e:
-            print('Error :: Service] - Update >', e)
+            print('Error :: Service] - update_for_schedule_event_init() >', e)
             raise
 
-    async def update_for_jobs_no_finished(self):
-        print("-- update_for_schedule_no_finished --")
+    async def update_for_jobs_functional_no_finished(self):
+        print("[ControlScheduleFunctionalService]-[update_for_jobs_functional_no_finished] - START ")
+
         jbc_execution = ControlExecutionService()
         date_now = TimezoneUtil.dateNowUTC()
         dateTime_Mongo = TimezoneUtil.getDateTimeForSearchMongo(date_now)
         try:
-            value_filter = [MatchConstants.EVENT_SCHEDULED_START]
-            jbc_schedule_l = await self.getJobForCondition(MatchConstants.GET_JOB_EVENT, value_filter)
+            value_filter = [MatchConstants.JOB_TYPE_FUNCTIONAL, MatchConstants.STATUS_SUCCESS,
+                            MatchConstants.EVENT_SCHEDULED_START]
+            jbc_schedule_l = await self.getJobForCondition(MatchConstants.GET_JOB_TYPE_STATUS_EVENT, value_filter)
             if jbc_schedule_l:
                 for jbc_sche_obj in jbc_schedule_l:
                     objectFind_up = jbc_sche_obj
@@ -135,11 +169,13 @@ class ControlScheduleService:
                         await jbc_execution.save_job_no_finished(objectFind_up[ControlScheduleModel.config.job_name],
                                                                  objectFind_up[
                                                                      ControlScheduleModel.config.championship])
+            print("[ControlScheduleFunctionalService]-[update_for_jobs_functional_no_finished] - END ")
+            return True
         except Exception as e:
             print('Error :: Service] - Update with schedule_event no  finished >', e)
-            raise
+            return False
 
-
+    """
     async def relaunch_schedule_jobs_with_fail(self):
         print("-- relaunch_jobs_with_fail --")
         jbc_execution = ControlExecutionService()
@@ -155,6 +191,7 @@ class ControlScheduleService:
                         print(" === Open Process Schedule type _planned === ")
                         job_schedule_dto = JobScheduleDto(objectFind_up.job_name,
                                                           objectFind_up.job_type,
+                                                          None,
                                                           objectFind_up.championship,
                                                           objectFind_up[ControlScheduleModel.config.start_date_execution],
                                                           objectFind_up[ControlScheduleModel.config.end_date_execution],
@@ -173,6 +210,21 @@ class ControlScheduleService:
         except Exception as e:
             print('Error :: Service] - relaunch_schedule_jobs_with_fail  >', e)
             raise
+    """
+
+    async def checkScheduleIsStopped(self, job_name: str, job_instance: str):
+        print("[ControlScheduleFunctionalService]-[checkScheduleIsStopped] - START ")
+        try:
+            values = [job_name, job_instance, MatchConstants.EVENT_SCHEDULED_STOPPED,
+                      MatchConstants.STATUS_STOPPER_MANUAL]
+            jbc_schedule_l = await self.getJobForCondition(MatchConstants.GET_JOB_BY_NAME_INSTANCE_EVENT_STATUS, values)
+            if jbc_schedule_l:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("[ControlScheduleFunctionalService]-[checkExistJobScheduleEventStopped] - ERROR ", e)
+            return False
 
     async def load_jobs_schedule_init(self):
         print("instance_job_support :")

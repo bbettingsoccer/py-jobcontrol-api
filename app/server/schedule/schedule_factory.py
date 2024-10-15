@@ -12,10 +12,6 @@ class ScheduleFactory(ABC):
         pass
 
     @abstractmethod
-    def check_job_runtime(self):
-        pass
-
-    @abstractmethod
     def handle_schedule_notification(self, event):
         pass
 

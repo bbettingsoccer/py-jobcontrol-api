@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Body
 from app.server.common.match_constants import MatchConstants
 from app.server.model.control_schedule_model import ControlScheduleModel
-from app.server.service.control_job_schedule_service import ControlScheduleService
+from app.server.service.control_schedule_functional_service import ControlScheduleFunctionalService
 
 router = APIRouter()
 
 
 @router.get("/", response_description="Match retrieved")
 async def getJobControlByAll():
-    service = ControlScheduleService()
+    service = ControlScheduleFunctionalService()
     objectL = await service.getJobAll()
     if objectL:
         return ControlScheduleModel.ResponseModel(objectL, "Jobs data retrieved successfully")
@@ -20,7 +20,7 @@ async def getJobControlByAll():
 
 @router.get("/championship/{championship}", response_description="Data retrieved")
 async def getJobControlByChampionsAndStatus(championship: str):
-    service = ControlScheduleService()
+    service = ControlScheduleFunctionalService()
     values = [championship]
     objectL = await service.getJobForCondition(MatchConstants.GET_JOB_CHAMPIONSHIP, values)
     if objectL:
@@ -30,7 +30,7 @@ async def getJobControlByChampionsAndStatus(championship: str):
 
 @router.get("/job_name/{job_name}", response_description="Data retrieved")
 async def getJobControlPlainByChampionsAndStatus(job_name: str):
-    service = ControlScheduleService()
+    service = ControlScheduleFunctionalService()
     values = [job_name]
     objectL = await service.getJobForCondition(MatchConstants.GET_JOB_NAME, values)
     if objectL:
@@ -40,7 +40,7 @@ async def getJobControlPlainByChampionsAndStatus(job_name: str):
 
 @router.post("/", response_description="Data saved successfully")
 async def post(data: ControlScheduleModel = Body(...)):
-    service = ControlScheduleService()
+    service = ControlScheduleFunctionalService()
     try:
         jsonObj = await service.save(data)
         return ControlScheduleModel.ResponseModel(jsonObj, "Match data retrieved successfully")
@@ -50,7 +50,7 @@ async def post(data: ControlScheduleModel = Body(...)):
 
 @router.delete("/job_name/{job_name}", response_description="Data deleted from the database")
 async def deleteJobForId(job_name: str):
-    service = ControlScheduleService()
+    service = ControlScheduleFunctionalService()
     values = [job_name]
     data = await service.deleteJobForCondition(MatchConstants.DELETE_JOB_NAME, values)
     if data:
